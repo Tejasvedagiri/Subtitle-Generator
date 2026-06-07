@@ -1,6 +1,4 @@
 import logging
-from typing import Optional
-
 import pysrt
 import datetime
 
