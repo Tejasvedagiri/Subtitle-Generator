@@ -3,6 +3,7 @@ import logging
 
 
 logger = logging.getLogger(__name__)
+logger.info("Imported utils.video module")
 
 def split_video_ffmpeg(input_file, start_time, end_time, output_file):
     """

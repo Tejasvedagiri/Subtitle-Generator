@@ -1,39 +1,24 @@
-from utils.model import load_model
-import pysrt
-import datetime
-from utils.video import split_video_ffmpeg
-from utils.time import coerce_time_to_srt_format
+import logging
+import argparse
+from generator.generator import generate_subtitles
+
+# Configure basic logging so import-time logs from modules are visible
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
+logger = logging.getLogger(__name__)
+logger.info("Imported main module")
 
 
-model = load_model("large-v3")
+def _build_arg_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description="Generate SRT subtitles from a video file.")
+    parser.add_argument("input", default="data/input.mp4", help="Input video path (default: data/input.mp4)")
+    parser.add_argument("output", default="data/output.srt", help="Output .srt path (default: data/output.srt)")
+    parser.add_argument("--model", "-m", default="large-v3", help="Model name to load (default: large-v3)")
+    parser.add_argument("--language", "-l", default="en", help="Language hint for transcription (default: en)")
+    return parser
 
-# 2. Transcribe the video (Specify Japanese language for better targeting)
-video_path = "data/input.mp4"
 
-# split_video_ffmpeg(video_path, "00:00:00", "00:10:00", "output_clip.mp4")
-# output_clip_path = "output_clip.mp4"
+if __name__ == "__main__":
+    parser = _build_arg_parser()
+    args = parser.parse_args()
+    generate_subtitles(args.input, args.output, args.model, args.language)
 
-result = model.transcribe(video_path, language="en")
-
-# 3. Create an empty SRT file structure
-subs = pysrt.SubRipFile()
-
-# 4. Process segments and add to SRT
-for index, segment in enumerate(result["segments"]):
-    # Convert start and end times to timedelta objects
-    start_time = datetime.timedelta(seconds=segment['start'])
-    end_time = datetime.timedelta(seconds=segment['end'])
-    text = segment['text'].strip()
-
-    # Create the subtitle object
-    sub = pysrt.SubRipItem(
-        index=index + 1,
-        start=coerce_time_to_srt_format(start_time),
-        end=coerce_time_to_srt_format(end_time),
-        text=text
-    )
-    subs.append(sub)
-
-# 5. Save the subtitles
-subs.save("output.srt", encoding="utf-8")
-print("Subtitles Generated Successfully!")

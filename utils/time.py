@@ -1,4 +1,8 @@
+import logging
 from pysrt import SubRipTime
+
+logger = logging.getLogger(__name__)
+logger.info("Imported utils.time module")
 
 
 def coerce_time_to_srt_format(td):
