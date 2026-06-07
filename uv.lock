@@ -521,7 +521,7 @@ wheels = [
 [[package]]
 name = "subtitle-generator"
 version = "0.1.0"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "openai-whisper" },
     { name = "pysrt" },

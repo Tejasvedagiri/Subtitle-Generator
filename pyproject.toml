@@ -1,7 +1,14 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
-name = "subtitle_generator"
+name = "subtitle-generator"
 version = "0.1.0"
-description = "Add your description here"
+description = "Generate SRT subtitle files from video using Whisper-style transcription models."
+authors = [
+    { name = "Tejas Vedagiri", email = "tejasvedagiri1223@gmail.com" },
+]
 readme = "README.md"
 requires-python = "==3.11.*"
 dependencies = [
@@ -10,6 +17,16 @@ dependencies = [
     "torch",
     "torchvision>=0.27.0",
 ]
+
+[project.scripts]
+convert = "run:main"
+
+[tool.uv]
+package = true
+
+[tool.setuptools]
+py-modules = ["run"]
+packages = ["generator", "utils"]
 
 [[tool.uv.index]]
 name = "pytorch-cu132"
@@ -20,4 +37,3 @@ explicit = true  # Prevents other packages from accidentally using this index
 torch = { index = "pytorch-cu132" }
 torchvision = { index = "pytorch-cu132" }
 torchaudio = { index = "pytorch-cu132" }
-
