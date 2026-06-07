@@ -1,44 +1,11 @@
-import whisper
+from utils.model import load_model
 import pysrt
 import datetime
-from pysrt import SubRipTime
-import subprocess
+from utils.video import split_video_ffmpeg
+from utils.time import coerce_time_to_srt_format
 
 
-def coerce_time_to_srt_format(td):
-    """
-    Converts time in seconds to SRT time format (HH:MM:SS,mmm).
-    """
-    hours = td.seconds // 3600
-    minutes = (td.seconds // 60) % 60
-    seconds = td.seconds % 60
-    milliseconds = td.microseconds // 1000
-
-    srt_time = SubRipTime(hours=hours, minutes=minutes, seconds=seconds, milliseconds=milliseconds)
-    return srt_time        
-
-def split_video_ffmpeg(input_file, start_time, end_time, output_file):
-    """
-    Splits a video clip from start_time to end_time without re-encoding.
-    Times can be in seconds (e.g., 90) or 'HH:MM:SS' format.
-    """
-    command = [
-        'ffmpeg', '-ss', str(start_time), 
-        '-i', input_file, 
-        '-to', str(end_time), 
-        '-c', 'copy', output_file
-    ]
-    
-    # Run the command
-    subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    print(f"Saved: {output_file}")
-
-# Example Usage
-
-
-# 1. Load the AI model (Choose from: tiny, base, small, medium, large)
-# 'large-v3' is highly recommended for best accuracy with Japanese kanji and kana
-model = whisper.load_model("large-v3")
+model = load_model("large-v3")
 
 # 2. Transcribe the video (Specify Japanese language for better targeting)
 video_path = "data/input.mp4"
