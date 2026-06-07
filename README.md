@@ -38,7 +38,7 @@ uv run convert --help
 Then run the conversion:
 
 ```bash
-uv run convert data/sample.mp4 data/sample.srt
+uv run convert data/sample.mp4
 ```
 
 ## Usage
@@ -49,13 +49,12 @@ uv run convert --help
 
 **Output:**
 ```
-usage: convert [-h] [--model MODEL] [--language LANGUAGE] input output
+usage: convert [-h] [--model MODEL] [--language LANGUAGE] inputs [inputs ...]
 
-Generate SRT subtitles from a video file.
+Generate SRT subtitles from video files or directories.
 
 positional arguments:
-  input                 Input video path (default: data/input.mp4)
-  output                Output .srt path (default: data/output.srt)
+  inputs                One or more input video files or directories containing video files.
 
 options:
   -h, --help            show this help message and exit
@@ -67,17 +66,20 @@ options:
 
 **Examples:**
 ```bash
-# Uses default paths (data/input.mp4 → data/output.srt)
-uv run convert
+# Convert a single video file and create data/sample.srt
+uv run convert data/sample.mp4
 
-# Specify custom input and output paths
-uv run convert video.mp4 subtitles.srt
+# Convert all supported files under the data folder
+uv run convert data
+
+# Convert multiple files or folders in one command
+uv run convert data/sample.mp4 data/sample_2.mp4
 
 # Specify model and language
-uv run convert video.mp4 subtitles.srt --model large-v3 --language en
+uv run convert data/sample.mp4 --model large-v3 --language en
 
-# Using short flags
-uv run convert video.mp4 subtitles.srt -m base -l es
+# Use a folder and file together
+uv run convert data sample.mp4
 ```
 
 ## Notes
